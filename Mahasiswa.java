@@ -1,17 +1,17 @@
-
+// PILAR OOP: INHERITANCE (Mahasiswa mewarisi semua sifat & kelakuan Anggota)
 public class Mahasiswa extends Anggota {
 
-    private String npm;
+    private String npm; // Enkapsulasi atribut spesifik Mahasiswa
 
     public Mahasiswa(String idAnggota, String nama, String npm) {
-        super(idAnggota, nama); // memanggil constructor superclass Anggota
+        // KONSEP: Keyword 'super' (Memanggil constructor milik induk kelas Anggota)
+        super(idAnggota, nama); 
         this.npm = npm;
     }
 
-    public String getNpm() {
-        return npm;
-    }
+    public String getNpm() { return npm; }
 
+    // PILAR OOP: POLYMORPHISM (Method Overriding)
     @Override
     public int getMaksHariPinjam() {
         return 7;
@@ -29,7 +29,6 @@ public class Mahasiswa extends Anggota {
                 + " | Denda: Rp" + (int) getTarifDendaPerHari() + "/hari");
     }
 
-    // Format: MAHASISWA;id;nama;npm
     @Override
     public String toFileString() {
         return "MAHASISWA;" + idAnggota + ";" + nama + ";" + npm;
