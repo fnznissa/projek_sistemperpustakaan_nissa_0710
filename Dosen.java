@@ -1,19 +1,20 @@
+// PILAR OOP: INHERITANCE (Dosen mewarisi kelas Anggota)
+// RELASI OOP: ASSOCIATION (interaksi bebas dengan kelas Mahasiswa)
 public class Dosen extends Anggota {
 
     private String nip;
 
     public Dosen(String idAnggota, String nama, String nip) {
-        super(idAnggota, nama); //inheritance
+        super(idAnggota, nama); // Keyword super untuk memanggil konstruktor induk
         this.nip = nip;
     }
 
-    public String getNip() {
-        return nip;
-    }
+    public String getNip() { return nip; }
 
-    @Override //abstraksi dari kelas Anggota
+    // PILAR OOP: POLYMORPHISM (Method Overriding)
+    @Override
     public int getMaksHariPinjam() {
-        return 30;
+        return 30; 
     }
 
     @Override
@@ -28,11 +29,11 @@ public class Dosen extends Anggota {
                 + " | Denda: Rp" + (int) getTarifDendaPerHari() + "/hari");
     }
 
-    public void mengajar(Mahasiswa m) { //asosiasi
+    // RELASI OOP: ASSOCIATION (Method ini berinteraksi langsung dengan objek Mahasiswa)
+    public void mengajar(Mahasiswa m) {
         System.out.println(nama + " mengajar " + m.getNama());
     }
 
-    // Format: DOSEN;id;nama;nip
     @Override
     public String toFileString() {
         return "DOSEN;" + idAnggota + ";" + nama + ";" + nip;
