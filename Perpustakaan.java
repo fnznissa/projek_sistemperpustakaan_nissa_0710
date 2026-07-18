@@ -1,3 +1,5 @@
+// RELASI OOP: COMPOSITION / AGGREGATION 
+// KONSEP: list & ArrayList)
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -8,8 +10,9 @@ import java.util.List;
 
 public class Perpustakaan {
 
+    // RELASI OOP: AGGREGATION / COMPOSITION 
     private final List<Buku> koleksiBuku;
-    private final List<Anggota> daftarAnggota;
+    private final List<Anggota> daftarAnggota; // Menampung objek Mahasiswa & Dosen ke satu list induk (Polimorfisme)[cite: 8]
     private final List<Transaksi> daftarTransaksi;
 
     private static final String FILE_BUKU = "data_buku.txt";
@@ -33,7 +36,7 @@ public class Perpustakaan {
                 return b;
             }
         }
-        return null; // tidak ditemukan
+        return null; 
     }
 
     public void tampilkanSemuaBuku() {
@@ -70,7 +73,8 @@ public class Perpustakaan {
         System.out.println("=== DAFTAR ANGGOTA ===");
 
         for (Anggota a : daftarAnggota) {
-            a.tampilkanInfo();
+            // PILAR OOP: POLYMORPHISM (Meskipun tipenya list Anggota, Java otomatis memanggil info versi Mahasiswa/Dosen)[cite: 8]
+            a.tampilkanInfo(); 
         }
     }
 
@@ -115,19 +119,8 @@ public class Perpustakaan {
         System.out.println("Transaksi dengan id " + idTransaksi + " tidak ditemukan / sudah dikembalikan.");
     }
 
-    public void tampilkanSemuaTransaksi() {
-        if (daftarTransaksi.isEmpty()) {
-            System.out.println("Belum ada transaksi peminjaman.");
-            return;
-        }
-        System.out.println("=== DAFTAR TRANSAKSI ===");
-        for (Transaksi t : daftarTransaksi) {
-            System.out.println(t);
-        }
-    }
-
     public void simpanDataKeFile() {
-        // try-with-resources otomatis menutup file, aman dari resource leak
+        // KONSEP: Try-With-Resources (Manajemen memori penutupan file otomatis)[cite: 8]
         try (BufferedWriter writerBuku = new BufferedWriter(new FileWriter(FILE_BUKU))) {
             for (Buku b : koleksiBuku) {
                 writerBuku.write(b.toFileString());
@@ -140,6 +133,7 @@ public class Perpustakaan {
 
         try (BufferedWriter writerAnggota = new BufferedWriter(new FileWriter(FILE_ANGGOTA))) {
             for (Anggota a : daftarAnggota) {
+                // PILAR OOP: POLYMORPHISM (toFileString() memanggil versi kelas anak masing-masing)
                 writerAnggota.write(a.toFileString());
                 writerAnggota.newLine();
             }
@@ -152,14 +146,11 @@ public class Perpustakaan {
     }
 
     public void muatDataDariFile() {
-        // ----- Muat data buku -----
         try (BufferedReader readerBuku = new BufferedReader(new FileReader(FILE_BUKU))) {
             koleksiBuku.clear();
             String baris;
             while ((baris = readerBuku.readLine()) != null) {
-                if (baris.trim().isEmpty()) {
-                    continue; // lewati baris kosong, contoh debugging: cegah error parsing
-                }
+                if (baris.trim().isEmpty()) continue;
                 try {
                     koleksiBuku.add(Buku.fromFileString(baris));
                 } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
@@ -170,14 +161,11 @@ public class Perpustakaan {
             System.out.println("Belum ada file data buku tersimpan (" + FILE_BUKU + ").");
         }
 
-        // ----- Muat data anggota -----
         try (BufferedReader readerAnggota = new BufferedReader(new FileReader(FILE_ANGGOTA))) {
             daftarAnggota.clear();
             String baris;
             while ((baris = readerAnggota.readLine()) != null) {
-                if (baris.trim().isEmpty()) {
-                    continue;
-                }
+                if (baris.trim().isEmpty()) continue;
                 try {
                     String[] bagian = baris.split(";");
                     String tipe = bagian[0];
@@ -185,12 +173,11 @@ public class Perpustakaan {
                     String nama = bagian[2];
                     String infoTambahan = bagian[3];
 
+                    // KONSEP: Parsing Object (Mengubah data teks menjadi bentuk objek polimorfisme)
                     if (tipe.equalsIgnoreCase("MAHASISWA")) {
                         daftarAnggota.add(new Mahasiswa(id, nama, infoTambahan));
                     } else if (tipe.equalsIgnoreCase("DOSEN")) {
                         daftarAnggota.add(new Dosen(id, nama, infoTambahan));
-                    } else {
-                        System.out.println("Tipe anggota tidak dikenali, baris dilewati: " + baris);
                     }
                 } catch (ArrayIndexOutOfBoundsException e) {
                     System.out.println("Baris anggota rusak/dilewati: " + baris);
@@ -199,7 +186,6 @@ public class Perpustakaan {
         } catch (IOException e) {
             System.out.println("Belum ada file data anggota tersimpan (" + FILE_ANGGOTA + ").");
         }
-
         System.out.println("Proses memuat data selesai.");
     }
 }
