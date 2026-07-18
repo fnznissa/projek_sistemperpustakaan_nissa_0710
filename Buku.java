@@ -1,17 +1,19 @@
-
+// PILAR OOP: ENCAPSULATION (Penyembunyian data dengan modifier private)
 public class Buku {
 
-    private String kodeBuku; //enkapsulasi
+    // PILAR OOP: ENCAPSULATION 
+    private String kodeBuku;
     private String judul;
     private String penulis;
     private int stok;
 
+    // KONSEP: CONSTRUCTOR OVERLOADING (Polimorfisme Statis)
     public Buku(String kodeBuku, String judul) {
         this(kodeBuku, judul, "Tidak diketahui", 0);
     }
 
     public Buku(String kodeBuku, String judul, int stok) {
-        this(kodeBuku, judul, "Tidak diketahui", stok);
+        this(kodeBuku, judul, "Tidak diketahui", stok); // Constructor Overloading
     }
 
     public Buku(String kodeBuku, String judul, String penulis, int stok) {
@@ -21,32 +23,16 @@ public class Buku {
         this.stok = stok;
     }
 
-    public String getKodeBuku() {
-        return kodeBuku;
-    }
+    // PILAR OOP: ENCAPSULATION 
+    public String getKodeBuku() { return kodeBuku; }
+    public String getJudul() { return judul; }
+    public String getPenulis() { return penulis; }
+    public int getStok() { return stok; }
 
-    public String getJudul() {
-        return judul;
-    }
-
-    public String getPenulis() {
-        return penulis;
-    }
-
-    public int getStok() {
-        return stok;
-    }
-
-    public void setJudul(String judul) {
-        this.judul = judul;
-    }
-
-    public void setPenulis(String penulis) {
-        this.penulis = penulis;
-    }
+    public void setJudul(String judul) { this.judul = judul; }
+    public void setPenulis(String penulis) { this.penulis = penulis; }
 
     public void setStok(int stok) {
-        // validasi sederhana supaya stok tidak pernah negatif
         if (stok < 0) {
             this.stok = 0;
         } else {
@@ -54,7 +40,6 @@ public class Buku {
         }
     }
 
-    // ===== METHOD tambahan untuk transaksi peminjaman/pengembalian =====
     public boolean kurangiStok() {
         if (stok > 0) {
             stok--;
@@ -63,7 +48,7 @@ public class Buku {
         return false; // stok habis, tidak bisa dipinjam
     }
 
-    public void tambahStok() {  //enkapsulasi
+    public void tambahStok() {
         stok++;
     }
 
@@ -71,7 +56,6 @@ public class Buku {
         return kodeBuku + ";" + judul + ";" + penulis + ";" + stok;
     }
 
-    // Parsing balik dari baris file menjadi object Buku
     public static Buku fromFileString(String baris) {
         String[] bagian = baris.split(";");
         String kode = bagian[0];
